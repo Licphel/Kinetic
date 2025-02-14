@@ -1,4 +1,7 @@
 # Kinetic
+![](https://img.shields.io/badge/.net->=8.0-informational?style=flat-square&logo=<LOGO_NAME>&logoColor=white&color=green)
+![](https://img.shields.io/badge/license-MIT-informational?style=flat-square&logo=<LOGO_NAME>&logoColor=white&color=2bbc8a)  
+
 One suite for game developing intended to be simpler and faster.
 ## Modules
 - App - Lifecycle & Resource management. 
