@@ -17,21 +17,21 @@ public class OGLTextureBuffer : TextureBuffer
 		int tid = GL.GenTexture();
 
 		GL.BindFramebuffer(FramebufferTarget.Framebuffer, Id);
-		GL.BindTexture(TextureTarget.Texture2D, tid);
+		GL.BindTexture(TextureTarget.Texture2d, tid);
 
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
+		GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMagFilter,
 			(int) OGLDeviceSettings.FilterMag);
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
+		GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMinFilter,
 			(int) OGLDeviceSettings.FilterMin);
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS,
+		GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapS,
 			(int) TextureWrapMode.Repeat);
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT,
+		GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapT,
 			(int) TextureWrapMode.Repeat);
 
 		GL.TexImage2D(
-			TextureTarget.Texture2D,
+			TextureTarget.Texture2d,
 			0,
-			PixelInternalFormat.Rgba,
+			InternalFormat.Rgba,
 			w,
 			h,
 			0,
@@ -43,7 +43,7 @@ public class OGLTextureBuffer : TextureBuffer
 		(
 			FramebufferTarget.Framebuffer,
 			FramebufferAttachment.ColorAttachment0,
-			TextureTarget.Texture2D,
+			TextureTarget.Texture2d,
 			tid,
 			0
 		);

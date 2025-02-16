@@ -7,9 +7,6 @@ using StbImageSharp;
 using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
 using Visual_Texture = Kinetic.Visual.Texture;
 
-//using System.Drawing;
-//using System.Drawing.Imaging;
-
 namespace Kinetic.OpenGL;
 
 public class OGLTexture : Visual_Texture
@@ -23,7 +20,7 @@ public class OGLTexture : Visual_Texture
 
 	static OGLTexture()
 	{
-		GL.Enable(EnableCap.Texture2D);
+		GL.Enable(EnableCap.Texture2d);
 	}
 
 	public OGLTexture(int id, int w, int h)
@@ -40,7 +37,7 @@ public class OGLTexture : Visual_Texture
 		Id = GL.GenTexture();
 
 		GL.ActiveTexture(TextureUnit.Texture0);
-		GL.BindTexture(TextureTarget.Texture2D, Id);
+		GL.BindTexture(TextureTarget.Texture2d, Id);
 
 		ImageResult result = _N_RES = ImageResult.FromMemory(File.ReadAllBytes(handler.Path), ColorComponents.RedGreenBlueAlpha);
 
@@ -48,9 +45,9 @@ public class OGLTexture : Visual_Texture
 		Height = result.Height;
 
 		GL.TexImage2D(
-			TextureTarget.Texture2D,
+			TextureTarget.Texture2d,
 			0,
-			PixelInternalFormat.Rgba,
+			InternalFormat.Rgba,
 			Width,
 			Height,
 			0,
@@ -59,21 +56,21 @@ public class OGLTexture : Visual_Texture
 			result.Data
 		);
 		
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
+		GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMagFilter,
 			(int) OGLDeviceSettings.FilterMag);
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
+		GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMinFilter,
 			(int) OGLDeviceSettings.FilterMin);
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS,
+		GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapS,
 			(int) OGLDeviceSettings.Wrap);
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT,
+		GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapT,
 			(int) OGLDeviceSettings.Wrap);
 
 		if(OGLDeviceSettings.MipmapLevel > 0)
 		{
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel,
+			GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureBaseLevel, 0);
+			GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMaxLevel,
 				OGLDeviceSettings.MipmapLevel);
-			GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+			GL.GenerateMipmap(TextureTarget.Texture2d);
 		}
 
 		NativeManager.I0.Remind(() => GL.DeleteTexture(Id));
@@ -85,7 +82,7 @@ public class OGLTexture : Visual_Texture
 		Id = GL.GenTexture();
 
 		GL.ActiveTexture(TextureUnit.Texture0);
-		GL.BindTexture(TextureTarget.Texture2D, Id);
+		GL.BindTexture(TextureTarget.Texture2d, Id);
 
 		NativeManager.I0.Remind(() => GL.DeleteTexture(Id));
 	}
@@ -93,7 +90,7 @@ public class OGLTexture : Visual_Texture
 	public void Upload(Bitmap bmap)
 	{
 		GL.ActiveTexture(TextureUnit.Texture0);
-		GL.BindTexture(TextureTarget.Texture2D, Id);
+		GL.BindTexture(TextureTarget.Texture2d, Id);
 
 		Width = bmap.Width;
 		Height = bmap.Height;
@@ -103,9 +100,9 @@ public class OGLTexture : Visual_Texture
 		BitmapData data = nb.LockBits(new(0, 0, Width, Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
 		GL.TexImage2D(
-			TextureTarget.Texture2D,
+			TextureTarget.Texture2d,
 			0,
-			PixelInternalFormat.Rgba,
+			InternalFormat.Rgba,
 			Width,
 			Height,
 			0,
@@ -114,17 +111,16 @@ public class OGLTexture : Visual_Texture
 			data.Scan0
 		);
 		
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
+		GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMagFilter,
 			(int)OGLDeviceSettings.FilterMag);
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
+		GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMinFilter,
 			(int)OGLDeviceSettings.FilterMin);
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS,
+		GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapS,
 			(int)OGLDeviceSettings.Wrap);
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT,
+		GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapT,
 			(int)OGLDeviceSettings.Wrap);
 		
-		//IDK Why I cannot dispose the bitmaps.
-		//It will throw an exception when I try.
+		//Idk why I cannot dispose the bitmap.
 		//bmap.Dispose();
 		nb.Dispose();
 	}

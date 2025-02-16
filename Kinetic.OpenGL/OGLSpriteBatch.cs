@@ -55,8 +55,8 @@ public unsafe class OGLSpriteBatch : SpriteBatch
 		GL.Enable(EnableCap.Blend);
 		GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-		Ebo = new Bufferobject<uint>(Indices, Indlen, BufferTarget.ElementArrayBuffer, BufferUsageHint.DynamicDraw);
-		Vbo = new Bufferobject<float>(Vertices, Verlen, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
+		Ebo = new Bufferobject<uint>(Indices, Indlen, BufferTarget.ElementArrayBuffer, BufferUsage.DynamicDraw);
+		Vbo = new Bufferobject<float>(Vertices, Verlen, BufferTarget.ArrayBuffer, BufferUsage.DynamicDraw);
 		Vao = new VertArrayobject<float, uint>(Vbo, Ebo);
 
 		ProgramDefault = GetDefaultShader();
@@ -332,7 +332,7 @@ public unsafe class OGLSpriteBatch : SpriteBatch
 		Ebo.Bind();
 		Vbo.UpdateBuffer(0, Vertice0, NumVertices);
 
-		GL.DrawElements(BeginMode.Triangles, NumIndices, DrawElementsType.UnsignedInt, 0);
+		GL.DrawElements(PrimitiveType.Triangles, NumIndices, DrawElementsType.UnsignedInt, 0);
 
 		Program.Unbind();
 

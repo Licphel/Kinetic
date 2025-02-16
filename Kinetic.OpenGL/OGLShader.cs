@@ -55,11 +55,11 @@ public class GLShaderProgram : ShaderProgram
 public struct ShaderAttribute
 {
 
-	readonly int id;
+	readonly uint id;
 
 	public ShaderAttribute(int id)
 	{
-		this.id = id;
+		this.id = (uint) id;
 	}
 
 	public void Ptr(VertexAttribPointerType type, int sizeb, int strideb, int offb)
@@ -99,34 +99,34 @@ public struct ShaderUniform
 	public unsafe void SetMat4(Matrix matrix)
 	{
 		Matrix4x4 m4 = OGLUtil.ToM4(matrix);
-		GL.UniformMatrix4(id, 1, true, (float*) &m4);
+		GL.UniformMatrix4fv(id, 1, true, (float*) &m4);
 	}
 
 	public void Set1(double i)
 	{
-		GL.Uniform1(id, i);
+		GL.Uniform1d(id, i);
 	}
 
 	public void Set2(double x, double y)
 	{
-		GL.Uniform2(id, x, y);
+		GL.Uniform2d(id, x, y);
 	}
 
 	public void Set3(double x, double y, double z)
 	{
-		GL.Uniform3(id, x, y, z);
+		GL.Uniform3d(id, x, y, z);
 	}
 
 	public void Set4(double x, double y, double z, double w)
 	{
-		GL.Uniform4(id, x, y, z, w);
+		GL.Uniform4d(id, x, y, z, w);
 	}
 
 	public void SetTexUnit(int i, int unit)
 	{
-		GL.ActiveTexture(TextureUnit.Texture0 + unit);
-		GL.BindTexture(TextureTarget.Texture2D, i);
-		GL.Uniform1(id, unit);
+		GL.ActiveTexture((TextureUnit) ((int) TextureUnit.Texture0 + unit));
+		GL.BindTexture(TextureTarget.Texture2d, i);
+		GL.Uniform1i(id, unit);
 		GL.ActiveTexture(TextureUnit.Texture0);
 	}
 
@@ -191,7 +191,7 @@ public class ShaderBuilds
 		GL.ShaderSource(id, code);
 		GL.CompileShader(id);
 
-		string txt = GL.GetShaderInfoLog(id);
+		GL.GetShaderInfoLog(id, out string txt);
 
 		if(!string.IsNullOrEmpty(txt))
 		{

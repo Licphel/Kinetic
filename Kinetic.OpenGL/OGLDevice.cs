@@ -1,8 +1,11 @@
-﻿using Kinetic.App;
+﻿using System.Reflection;
+using Kinetic.App;
 using Kinetic.Input;
 using Kinetic.IO;
 using Kinetic.Math;
 using Kinetic.Visual;
+using OpenTK;
+using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using StbImageSharp;
 using GL = OpenTK.Graphics.OpenGL.GL;
@@ -79,8 +82,13 @@ public class OGLDevice
 
 		GLFW.MakeContextCurrent(Window);
 		GLFW.ShowWindow(Window);
-		GL.LoadBindings(new GLFWBindingsContext());
-
+		
+		IBindingsContext ctx = new GLFWBindingsContext();
+		Assembly assembly = Assembly.Load("OpenTK.Graphics");
+		Type type = assembly.GetType("OpenTK.Graphics.GLLoader");
+		MethodInfo method = type.GetMethod("LoadBindings");
+		method.Invoke(null, [ctx]);
+		
 		OnLoad();
 	}
 

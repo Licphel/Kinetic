@@ -10,9 +10,9 @@ namespace Kinetic.OpenGL;
 public class OGLUtil
 {
 
-	public static Color ToColor(Vector4 vec)
+	public static Color4<Rgba> ToColor(Vector4 vec)
 	{
-		return Color.FromArgb((int) (vec.w * 255), (int) (vec.x * 255), (int) (vec.y * 255), (int) (vec.z * 255));
+		return new Color4<Rgba>((int) (vec.x * 255), (int) (vec.y * 255), (int) (vec.z * 255), (int) (vec.w * 255));
 	}
 
 	public static Matrix4x4 ToM4(Matrix mat)

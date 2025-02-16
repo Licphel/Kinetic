@@ -10,7 +10,7 @@ public class Bufferobject<T> where T : unmanaged
 
 	public int Id;
 
-	public unsafe Bufferobject(T* data, int len, BufferTarget target, BufferUsageHint hint)
+	public unsafe Bufferobject(T* data, int len, BufferTarget target, BufferUsage hint)
 	{
 		type = target;
 		Id = GL.GenBuffer();
