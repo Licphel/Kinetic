@@ -26,8 +26,8 @@ public class OGLTexture : Visual_Texture
 	public OGLTexture(int id, int w, int h)
 	{
 		Id = id;
-		Width = w;
-		Height = h;
+		uw = w;
+		vh = h;
 	}
 
 	public OGLTexture(FileHandle handler)
@@ -41,8 +41,8 @@ public class OGLTexture : Visual_Texture
 
 		ImageResult result = _N_RES = ImageResult.FromMemory(File.ReadAllBytes(handler.Path), ColorComponents.RedGreenBlueAlpha);
 
-		Width = result.Width;
-		Height = result.Height;
+		uw = result.Width;
+		vh = result.Height;
 
 		GL.TexImage2D(
 			TextureTarget.Texture2d,
@@ -92,8 +92,8 @@ public class OGLTexture : Visual_Texture
 		GL.ActiveTexture(TextureUnit.Texture0);
 		GL.BindTexture(TextureTarget.Texture2d, Id);
 
-		Width = bmap.Width;
-		Height = bmap.Height;
+		uw = bmap.Width;
+		vh = bmap.Height;
 
 		var nb = bmap.Clone() as Bitmap;
 		

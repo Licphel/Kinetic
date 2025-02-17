@@ -1,14 +1,13 @@
 ﻿namespace Kinetic.Visual;
 
-public abstract class Texture : IconDimensional
+public abstract class Texture : TexturePart
 {
 
-	public int Width { get; set; }
-	public int Height { get; set; }
+	public override Texture Src => this;
 
-	public void Draw(SpriteBatch batch, float x, float y, float w, float h)
+	public override void Draw(SpriteBatch batch, float x, float y, float w, float h)
 	{
-		batch.Draw(this, x, y, w, h);
+		batch.Draw((Texture) this, x, y, w, h);
 	}
 
 }

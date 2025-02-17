@@ -1,7 +1,7 @@
-﻿namespace Kinetic.Visual;
+﻿using Kinetic.Math;
 
-//This is the very light ninepatch with limited functions.
-//But it's too difficult to write a more complicated one.
+namespace Kinetic.Visual;
+
 public class NinePatch : Icon
 {
 
@@ -17,13 +17,16 @@ public class NinePatch : Icon
 	readonly TexturePart T;
 	readonly float th;
 	readonly float tw;
-	float scale;
+	readonly float scale;
+	//Sometimes we don't want the texture parts to overlap because of w % tw != 0 or h % th != 0.
+	//Generally, when the texture has transparent parts, turn it off.
+	public bool AllowOverlapping = true;
 
-	public NinePatch(Texture texture) : this(texture, 1)
+	public NinePatch(TexturePart texture) : this(texture, 1)
 	{
 	}
 
-	public NinePatch(Texture tex, float scale)
+	public NinePatch(TexturePart tex, float scale)
 	{
 		this.scale = scale;
 
@@ -48,9 +51,16 @@ public class NinePatch : Icon
 	{
 		float nw = CeilW(w);
 		float nh = CeilH(h);
-		float x2 = x + ActualW(w);
-		float y2 = y + ActualH(h);
-
+		float x2 = x + (AllowOverlapping ? w - tw : ActualW(w));
+		float y2 = y + (AllowOverlapping ? h - th : ActualW(h));
+		
+		for(int i = 1; i < nw - 1; i++)
+		{
+			for(int j = 1; j < nh - 1; j++)
+			{
+				C.Draw(batch, x + i * tw, y + j * th, tw, th);//center draw
+			}
+		}
 		LB.Draw(batch, x, y, tw, th);
 		for(int i = 1; i < nh - 1; i++)
 		{
@@ -59,7 +69,7 @@ public class NinePatch : Icon
 		LT.Draw(batch, x, y2, tw, th);
 		for(int i = 1; i < nw - 1; i++)
 		{
-			B.Draw(batch, x + i * tw, y, tw, th);//top draw
+			B.Draw(batch, x + i * tw, y, tw, th);//bottom draw
 		}
 		RB.Draw(batch, x2, y, tw, th);
 		for(int i = 1; i < nh - 1; i++)
@@ -69,26 +79,18 @@ public class NinePatch : Icon
 		RT.Draw(batch, x2, y2, tw, th);
 		for(int i = 1; i < nw - 1; i++)
 		{
-			T.Draw(batch, x + i * tw, y2, tw, th);//bottom draw
-		}
-
-		for(int i = 1; i < nw - 1; i++)
-		{
-			for(int j = 1; j < nh - 1; j++)
-			{
-				C.Draw(batch, x + i * tw, y + j * th, tw, th);//center draw
-			}
+			T.Draw(batch, x + i * tw, y2, tw, th);//top draw
 		}
 	}
 
 	public float CeilW(float mw)
 	{
-		return (float) System.Math.Ceiling(mw / tw);
+		return FloatMath.Ceiling(mw / tw);
 	}
 
 	public float CeilH(float mh)
 	{
-		return (float) System.Math.Ceiling(mh / th);
+		return FloatMath.Ceiling(mh / th);
 	}
 
 	public float ActualW(float mw)

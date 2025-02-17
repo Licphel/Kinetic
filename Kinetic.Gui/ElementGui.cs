@@ -8,7 +8,7 @@ public class ElementGui : ElementManager
 {
 
 	public static List<ElementGui> Viewings = new();
-	public static NinePatch DefaultTooltipPatches;
+	public static Icon DefaultTooltipPatches;
 
 	public int OpenTicks;
 	public ElementGui Parent;
@@ -18,8 +18,8 @@ public class ElementGui : ElementManager
 	public VaryingVector2 TempCursor = new VaryingVector2();
 
 	public Resolution Resolution;
-	public virtual float FontScmul => 1;
-	public virtual float ScaleMul => 1;
+	public virtual float FontScmul => 1 / ScaleMul;
+	public virtual float ScaleMul => 2;
 	public virtual float ScaleLocked => -1;
 	public virtual bool ForceResolution => false;
 
@@ -29,8 +29,8 @@ public class ElementGui : ElementManager
 	{
 		if(!IsInited)
 		{
-			IsInited = true;
 			InitComponents();
+			IsInited = true;
 		}
 		RelocateComponents();
 
@@ -118,9 +118,11 @@ public class ElementGui : ElementManager
 	//Tooltips
 
 	List<Lore> TooltipList = new List<Lore>();
+	private bool reved;
 
 	public virtual List<Lore> CollectTooltips()
 	{
+		reved = false;
 		List<Lore> lst = TooltipList;
 		lst.Clear();
 
@@ -129,13 +131,11 @@ public class ElementGui : ElementManager
 			if(component.Bound.Contains(TempCursor))
 				component.CollectTooltips(lst);
 		}
-
-		lst.Reverse();//we need to reverse it because the opengl origin.
-
+		
 		return lst;
 	}
 
-	public virtual NinePatch TooltipBackground => DefaultTooltipPatches;
+	public virtual Icon TooltipBackground => DefaultTooltipPatches;
 
 	public virtual void DrawTooltips(SpriteBatch batch)
 	{
@@ -147,6 +147,12 @@ public class ElementGui : ElementManager
 		float h = 0;
 		float mw = 0;
 
+		if(!reved)
+		{
+			TooltipList.Reverse();
+			reved = true;
+		}
+		
 		foreach(Lore o in TooltipList)
 		{
 			var bd = batch.Font.GetBounds(o, maxw0);
@@ -156,7 +162,7 @@ public class ElementGui : ElementManager
 			if(w > maxw0) mw = maxw0;
 		}
 
-		float x = TempCursor.x + 10, y = TempCursor.y - 10 - h;
+		float x = TempCursor.x + 12, y = TempCursor.y - 12 - h;
 
 		if(x + 12 + mw >= Size.x)
 		{

@@ -3,7 +3,6 @@ using Kinetic.App;
 using Kinetic.Math;
 using Kinetic.Visual;
 using OpenTK.Graphics.OpenGL;
-using Draw_Texture = Kinetic.Visual.Texture;
 
 namespace Kinetic.OpenGL;
 
@@ -98,7 +97,7 @@ public unsafe class OGLSpriteBatch : SpriteBatch
 		Load(ProgramDefault);
 	}
 
-	public override void Draw(Draw_Texture texture, float x, float y, float width, float height, float srcX, float srcY,
+	public override void Draw(Texture texture, float x, float y, float width, float height, float srcX, float srcY,
 	                          float srcWidth, float srcHeight)
 	{
 		texture = texture ?? TexMissing;
